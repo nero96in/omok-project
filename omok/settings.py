@@ -30,7 +30,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     '.ap-northeast-2.compute.amazonaws.com',
-    '.omok-test.ga',
+    'omok-test.ga',
 ]
 
 
