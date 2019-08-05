@@ -485,10 +485,10 @@ Board.prototype.playMove = function(coord, stone, ko) {
   }
 
   // Suicide not allowed
-  if(captures.length === 0 &&
-      !this.hasType(this.getGroup(coord, stone).neighbors, C.CLEAR))
-    return { success: false,
-      errorMsg: 'Suicide is not allowed!' };
+  // if(captures.length === 0 &&
+  //     !this.hasType(this.getGroup(coord, stone).neighbors, C.CLEAR))
+  //   return { success: false,
+  //     errorMsg: 'Suicide is not allowed!' };
 
   // Check for ko. Note that captures were not removed so there should
   // be zero liberties around this stone in case of a ko. Also, if the

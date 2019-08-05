@@ -51,7 +51,7 @@ jsetup.create('board', function(canvas) {
 
     var play = jboard.playMove(coord, player, ko);
 
-    // if(play.success) {
+    if(play.success) {
       node = jrecord.createNode(true);
       node.setType(coord, player); // play stone
      
@@ -69,7 +69,9 @@ jsetup.create('board', function(canvas) {
 
       player = opponent;
      
-    // } else alert('Illegal move: ' + play.errorMsg);
+    } else {
+      // alert('Illegal move: ' + play.errorMsg);
+    }
   });
 
   canvas.addListener('mousemove', function(coord, ev) {
