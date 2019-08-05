@@ -10,6 +10,6 @@ def index(request):
     return render(request, 'omok_main/index.html', {})
 
 def room(request, room_name):
-    return render(request, 'omok_main/room.html', {
+    return render(request, 'omok_main/demoPlay.html', {
         'room_name_json': mark_safe(json.dumps(room_name))
     })
