@@ -16,6 +16,10 @@
 <script type="text/javascript" src="{% static 'omok_main/dist/jgoboard-latest.js' %}"></script>
 <script type="text/javascript" src="{% static 'omok_main/large/board.js' %}"></script>
 <script type="text/javascript">
+var roomName = {{ room_name_json }};
+
+
+
 var updateCaptures = function (node) {
   document.getElementById('black-captures').innerText = node.info.captures[JGO.BLACK];
   document.getElementById('white-captures').innerText = node.info.captures[JGO.WHITE];
@@ -26,21 +30,28 @@ var jsetup = new JGO.Setup(jboard, JGO.BOARD.largeWalnut);
 var player = JGO.BLACK; // next player
 var ko = false, lastMove = false; // ko coordinate and last move coordinate
 var lastHover = false, lastX = -1, lastY = -1; // hover helper vars
-
-
 jsetup.setOptions({stars: {points:5}});
 jsetup.create('board', function(canvas) {
+  var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/omok/' + roomName + '/');
+
+  chatSocket.onclose = function(e) {
+    console.error('Chat socket closed unexpectedly');
+  };
   canvas.addListener('click', function(coord, ev) {
+    // console.log(player, coord)
+    message = {"player": player, "x": coord['i'], "y": coord['j']}
     var opponent = (player == JGO.BLACK) ? JGO.WHITE : JGO.BLACK;
 
-    if(ev.shiftKey) { // on shift do edit
-      if(jboard.getMark(coord) == JGO.MARK.NONE)
-        jboard.setMark(coord, JGO.MARK.SELECTED);
-      else
-        jboard.setMark(coord, JGO.MARK.NONE);
+    // if(ev.shiftKey) { // on shift do edit
+    //   if(jboard.getMark(coord) == JGO.MARK.NONE)
+    //     jboard.setMark(coord, JGO.MARK.SELECTED);
+    //   else
+    //     jboard.setMark(coord, JGO.MARK.NONE);
 
-      return;
-    }
+    //   return;
+    // }
 
     // clear hover away - it'll be replaced or then it will be an illegal move
     // in any case so no need to worry about putting it back afterwards
@@ -50,29 +61,53 @@ jsetup.create('board', function(canvas) {
     lastHover = false;
 
     var play = jboard.playMove(coord, player, ko);
+    console.log(play)
 
     if(play.success) {
-      node = jrecord.createNode(true);
-      node.setType(coord, player); // play stone
-     
-      if(lastMove)
-        node.setMark(lastMove, JGO.MARK.NONE); // clear previous mark
-      if(ko)
-        node.setMark(ko, JGO.MARK.NONE); // clear previous ko mark
+      chatSocket.send(JSON.stringify({
+          'message': message
+      }));
+      // chatSocket.onmessage = function(e) {
+      //     var data = JSON.parse(e.data);
+      //     var message = data['message'];
+      //     console.log(message)
+      //     x = message['x']
+      //     y = message['y']
+      //     coord = new JGO.Coordinate(x, y)
 
-      node.setMark(coord, JGO.MARK.CIRCLE); // mark move
-      lastMove = coord;
+      //     node = jrecord.createNode(true);
+      //     node.setType(coord, player); // play stone
+        
+      //     if(lastMove)
+      //       node.setMark(lastMove, JGO.MARK.NONE); // clear previous mark
+      //     // if(ko)
+      //     //   node.setMark(ko, JGO.MARK.NONE); // clear previous ko mark
 
-      if(play.ko)
-        node.setMark(play.ko, JGO.MARK.CIRCLE); // mark ko, too
-      ko = play.ko;
-
+      //     node.setMark(coord, JGO.MARK.CIRCLE); // mark move
+      //     lastMove = coord;
+      // };
       player = opponent;
-     
     } else {
       // alert('Illegal move: ' + play.errorMsg);
     }
   });
+
+  chatSocket.onmessage = function(e) {
+    var data = JSON.parse(e.data);
+    var message = data['message'];
+    console.log(message)
+    // player = message['player']
+    x = message['x']
+    y = message['y']
+    coord = new JGO.Coordinate(x, y)
+
+    node = jrecord.createNode(true);
+    node.setType(coord, message['player']); // play stone
+    if(lastMove)
+      node.setMark(lastMove, JGO.MARK.NONE); // clear previous mark
+    node.setMark(coord, JGO.MARK.CIRCLE); // mark move
+    lastMove = coord;
+  };
 
   canvas.addListener('mousemove', function(coord, ev) {
     if(coord.i == -1 || coord.j == -1 || (coord.i == lastX && coord.j == lastY))
