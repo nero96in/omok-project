@@ -96,6 +96,7 @@ jsetup.create('board', function(canvas) {
     var data = JSON.parse(e.data);
     var message = data['message'];
     console.log(message)
+    
     // player = message['player']
     x = message['x']
     y = message['y']
@@ -107,6 +108,10 @@ jsetup.create('board', function(canvas) {
       node.setMark(lastMove, JGO.MARK.NONE); // clear previous mark
     node.setMark(coord, JGO.MARK.CIRCLE); // mark move
     lastMove = coord;
+
+    if(message['alert']){
+      alert(message['alert'])
+    }
   };
 
   canvas.addListener('mousemove', function(coord, ev) {
