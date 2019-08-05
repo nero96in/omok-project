@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800&display=swap');
+
+* {
+    font-family: 'Nanum Gothic', sans-serif !important;
+}
+
+#banner {
+    height: 90vh;
+    min-height: 500px;
+}
+
+#title {
+    font-weight: 700;
+}

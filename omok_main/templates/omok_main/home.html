@@ -1,0 +1,28 @@
+{% extends 'omok_main/base.html' %}
+{% load static %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'omok_main/home.css' %}">
+{% endblock css %}
+    
+
+{% block content %}
+<div class="container w-100 d-flex flex-column justify-content-center align-items-center" id="banner">
+    <h1 id='title'>
+        오목하자! 데모 버전입니다.
+    </h1>
+    <a href="/omok" class="mt-4">
+        <button type="button" class="btn btn-dark">
+            오목하러 가기
+        </button>
+    </a>
+</div>
+<div class="container w-100 d-flex justify-content-center align-items-center" id="banner">
+    
+</div>
+
+
+
+{% endblock content %}
+    

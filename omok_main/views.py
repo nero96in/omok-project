@@ -3,6 +3,9 @@ from django.utils.safestring import mark_safe
 import json
 
 # Create your views here.
+def home(request):
+    return render(request, 'omok_main/home.html')
+
 def index(request):
     return render(request, 'omok_main/index.html', {})
 
