@@ -10,6 +10,10 @@ def index(request):
     return render(request, 'omok_main/index.html', {})
 
 def room(request, room_name):
+    username = None
+    if request.user.is_authenticated:
+        username = request.user.username
     return render(request, 'omok_main/demoPlay.html', {
-        'room_name_json': mark_safe(json.dumps(room_name))
+        'room_name_json': mark_safe(json.dumps(room_name)),
+        'user_name_json': mark_safe(json.dumps(username))
     })

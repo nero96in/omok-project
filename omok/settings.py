@@ -38,6 +38,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'channels',
+    'account',
     'omok_main',
     'django.contrib.admin',
     'django.contrib.auth',

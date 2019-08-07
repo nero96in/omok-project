@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from omok_main import views as omok_main_views
+import omok_main.views
+import account.views
 
 urlpatterns = [
-    path('', omok_main_views.home, name='home'),
+    path('', omok_main.views.home, name='home'),
+    path('login_home/', account.views.home, name='login_home'),
     path('admin/', admin.site.urls),
     path('omok/', include('omok_main.urls')),
+    path('account/', include('account.urls')),
 ]

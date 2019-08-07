@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Signup{% endblock %}
+{% block content %}
+<div class="signup">
+	<form action="" method="post">
+		{% csrf_token %}
+		{% for field in signup_form %}
+			<div class="form-group{% if field.errors %} has-error{% endif %}">
+				{{ field.label_tag }}
+				{{ field }}
+				{% if field.errors %}
+					{% for error in field.errors %}
+					<span class="help-block">{{ error }}</span>
+					{% endfor %}
+				{% endif %}
+			</div>
+		{% endfor %}
+
+		{% if signup_form.non_field_errors %}
+			{% for error in login_form.non_field_errors %}
+			<p class="text-danger"><b>{{ error }}</b></p>
+			{% endfor %}
+		{% endif %}
+		<button class="btn btn-primary btn-block">회원가입</button>
+	</form>
+</div>
+{% endblock %}
+
+
+
+
+<!-- 
+  <h1>Sign Up!</h1>
+
+  <form method="POST" action="{% url 'signup'%}">
+
+    {% csrf_token %}
+    Username:
+    <br>
+    <input name="username"  type="text" value="">
+    <br>
+    Password:
+    <br>
+    <input name="password1"  type="password" value="">
+    <br>
+    Confirm Password:
+    <br>
+    <input name="password2"  type="password" value="">
+    <br>
+    E-mail Address
+    <input name="eamil", type="email" , value="">
+    <br>
+    <br>
+    <input class="btn btn-primary" type="submit" value="Sign Up!">
+  </form>
+  {% if error %}
+  {{error}}
+  {%endif%} -->
+
