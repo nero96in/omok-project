@@ -26,7 +26,7 @@ var updateCaptures = function (node) {
 var jrecord = new JGO.Record(19);
 var jboard = jrecord.jboard;
 var jsetup = new JGO.Setup(jboard, JGO.BOARD.largeWalnut);
-var player = JGO.BLACK; // next player
+var player = undefined; // next player
 
 var black_player = undefined
 var white_player = undefined
@@ -107,8 +107,6 @@ jsetup.create('board', function(canvas) {
       }
       alert(start_settings['alert'])
     }
-    
-    
   };
 
   canvas.addListener('mousemove', function(coord, ev) {

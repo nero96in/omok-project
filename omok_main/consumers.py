@@ -15,6 +15,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = 'chat_%s' % self.room_name
         self.user = self.scope["user"]
         print(self.user)
+        # Join room group
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name,
+        )
 
         # 룸이 이미 존재하는지 확인.
         if Room.objects.filter(room_name=self.room_name):
@@ -54,11 +59,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room.save()
             await self.accept()
 
-        # Join room group
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name,
-        )
+        
         
         # await self.channel_layer.group_send(
         #         self.room_group_name,
