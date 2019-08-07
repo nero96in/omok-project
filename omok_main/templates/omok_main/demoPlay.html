@@ -45,9 +45,12 @@ jsetup.create('board', function(canvas) {
   };
 
   canvas.addListener('click', function(coord, ev) {
+    if(current_player != player | player == undefined){
+      return 
+    }
     // console.log(player, coord)
     message = {"player": player, "x": coord['i'], "y": coord['j']}
-    console.log(message)
+    //console.log(message)
     // var opponent = (player == JGO.BLACK) ? JGO.WHITE : JGO.BLACK;
 
     if(lastHover)
@@ -56,7 +59,7 @@ jsetup.create('board', function(canvas) {
     lastHover = false;
 
     var play = jboard.playMove(coord, player, ko);
-    console.log(play)
+    // console.log(play)
 
     if(play.success) {
       chatSocket.send(JSON.stringify({
@@ -72,20 +75,20 @@ jsetup.create('board', function(canvas) {
     var data = JSON.parse(e.data);
     var message = data['message'];
     var start_settings = data['start_settings']
-    console.log(data)
+    // console.log(data)
     
     if(message){
       console.log(message)
+      console.log('wow')
       // player = message['player']
       x = message['x']
       y = message['y']
       coord = new JGO.Coordinate(x, y)
-      if(message['current_player'] == 1){
-        current_player = 2
-      } else{
-        current_player = 1
-      }
-
+      
+      console.log('current_player1:', current_player)
+      current_player = message['current_player']
+      console.log('current_player2:', current_player)
+      
       node = jrecord.createNode(true);
       node.setType(coord, message['player']); // play stone
       if(lastMove)
@@ -126,7 +129,9 @@ jsetup.create('board', function(canvas) {
     lastY = coord.j;
     //console.log(lastX, lastY)
 
-    console.log(current_player, player)
+    // console.log(current_player, player)
+    // console.log('current_player:', current_player)
+    // console.log('player:', player)
     if(current_player == player){
       if(jboard.getType(coord) == JGO.CLEAR && jboard.getMark(coord) == JGO.MARK.NONE) {
         if(player == 1){
