@@ -67,6 +67,35 @@ jsetup.create('board', function(canvas) {
     }
   });
 
+  canvas.addListener('mousemove', function(coord, ev) {
+    if(coord.i == -1 || coord.j == -1 || (coord.i == lastX && coord.j == lastY))
+      return;
+
+    if(lastHover) // clear previous hover if there was one
+      jboard.setType(new JGO.Coordinate(lastX, lastY), JGO.CLEAR);
+
+    lastX = coord.i;
+    lastY = coord.j;
+    //console.log(lastX, lastY) 
+
+    if(jboard.getType(coord) == JGO.CLEAR && jboard.getMark(coord) == JGO.MARK.NONE) {
+      if(player == 1){
+        jboard.setType(coord, JGO.DIM_BLACK);
+      } else {
+        jboard.setType(coord, JGO.DIM_WHITE);
+      }
+
+      // jboard.setType(coord, player == JGO.WHITE ? JGO.DIM_WHITE : JGO.DIM_BLACK);
+      lastHover = true;
+    } else
+      lastHover = false;
+  });
+    
+    
+  };
+
+  
+
   chatSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
     var message = data['message'];
@@ -107,27 +136,8 @@ jsetup.create('board', function(canvas) {
       }
       alert(start_settings['alert'])
     }
-    
-    
-  };
 
-  canvas.addListener('mousemove', function(coord, ev) {
-    if(coord.i == -1 || coord.j == -1 || (coord.i == lastX && coord.j == lastY))
-      return;
-
-    if(lastHover) // clear previous hover if there was one
-      jboard.setType(new JGO.Coordinate(lastX, lastY), JGO.CLEAR);
-
-    lastX = coord.i;
-    lastY = coord.j;
-    //console.log(lastX, lastY) 
-
-    if(jboard.getType(coord) == JGO.CLEAR && jboard.getMark(coord) == JGO.MARK.NONE) {
-      jboard.setType(coord, player);
-      lastHover = true;
-    } else
-      lastHover = false;
-  });
+  
 
   canvas.addListener('mouseout', function(ev) {
     if(lastHover)
