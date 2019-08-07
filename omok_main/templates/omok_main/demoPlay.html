@@ -46,6 +46,7 @@ jsetup.create('board', function(canvas) {
   canvas.addListener('click', function(coord, ev) {
     // console.log(player, coord)
     message = {"player": player, "x": coord['i'], "y": coord['j']}
+    console.log(message)
     // var opponent = (player == JGO.BLACK) ? JGO.WHITE : JGO.BLACK;
 
     if(lastHover)
