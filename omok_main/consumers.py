@@ -30,10 +30,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'white': play_order[1],
                     'alert': "match success",
                 }
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'start_settings',
+                        'start_settings': start_settings,
+                    }
+                )
                 # await self.accept()
-                await self.send(text_data=json.dumps({
-                    'start_settings': start_settings
-                }))
+                # await self.send(text_data=json.dumps({
+                #     'start_settings': start_settings
+                # }))
             
             # else:
             #     self.room.player1 = str(self.user)
