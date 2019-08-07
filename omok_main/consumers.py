@@ -10,7 +10,7 @@ import random
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.omok = Omok()
-        
+        self.current_player = 1
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
         self.user = self.scope["user"]
@@ -33,6 +33,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 start_settings = {
                     'black': play_order[0],
                     'white': play_order[1],
+                    'current_player': self.current_player,
                     'alert': "match success",
                 }
                 await self.channel_layer.group_send(
@@ -95,6 +96,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             player = message['player']
             x = message['x']
             y = message['y']
+            message['current_player'] = self.current_player
             self.omok.Put_omok(player, x, y)
             # print(self.omok.x, self.omok.y)
             col,row,digonal_1,digonal_2 = self.omok.Trace()
@@ -104,8 +106,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             sam_digonal_2 = self.omok.samsam(digonal_2)
             sum_of_sam = sam_col + sam_row + sam_digonal_1 + sam_digonal_2 
             
-            self.omok.Draw()
-            print(col,row,digonal_1,digonal_2)
+            # self.omok.Draw()
+            # print(col,row,digonal_1,digonal_2)
 
             if self.omok.Rule_Omok(col,row,digonal_1,digonal_2) == 'exit':
                 print(self.omok.Color , " Win!")

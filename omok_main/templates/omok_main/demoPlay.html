@@ -28,6 +28,7 @@ var jboard = jrecord.jboard;
 var jsetup = new JGO.Setup(jboard, JGO.BOARD.largeWalnut);
 var player = undefined; // next player
 
+var current_player = undefined
 var black_player = undefined
 var white_player = undefined
 
@@ -73,13 +74,17 @@ jsetup.create('board', function(canvas) {
     var start_settings = data['start_settings']
     console.log(data)
     
-
     if(message){
       console.log(message)
       // player = message['player']
       x = message['x']
       y = message['y']
       coord = new JGO.Coordinate(x, y)
+      if(message['current_player'] == 1){
+        current_player = 2
+      } else{
+        current_player = 1
+      }
 
       node = jrecord.createNode(true);
       node.setType(coord, message['player']); // play stone
@@ -96,6 +101,7 @@ jsetup.create('board', function(canvas) {
     if(start_settings) {
       black_player = start_settings['black']
       white_player = start_settings['white']
+      current_player = start_settings['current_player']
 
       console.log('black:', black_player)
       console.log('white:', white_player)
@@ -118,19 +124,23 @@ jsetup.create('board', function(canvas) {
 
     lastX = coord.i;
     lastY = coord.j;
-    //console.log(lastX, lastY) 
+    //console.log(lastX, lastY)
 
-    if(jboard.getType(coord) == JGO.CLEAR && jboard.getMark(coord) == JGO.MARK.NONE) {
-      if(player == 1){
-        jboard.setType(coord, JGO.DIM_BLACK);
-      } else if(player == 2){
-        jboard.setType(coord, JGO.DIM_WHITE);
-      }
+    console.log(current_player, player)
+    if(current_player == player){
+      if(jboard.getType(coord) == JGO.CLEAR && jboard.getMark(coord) == JGO.MARK.NONE) {
+        if(player == 1){
+          jboard.setType(coord, JGO.DIM_BLACK);
+        } else if(player == 2){
+          jboard.setType(coord, JGO.DIM_WHITE);
+        }
 
-      //jboard.setType(coord, player == JGO.WHITE ? JGO.DIM_WHITE : JGO.DIM_BLACK);
-      lastHover = true;
-    } else
-      lastHover = false;
+        //jboard.setType(coord, player == JGO.WHITE ? JGO.DIM_WHITE : JGO.DIM_BLACK);
+        lastHover = true;
+      } else
+        lastHover = false;
+    }
+    
   });
 
   canvas.addListener('mouseout', function(ev) {
