@@ -45,11 +45,6 @@ jsetup.create('board', function(canvas) {
 
   canvas.addListener('click', function(coord, ev) {
     // console.log(player, coord)
-    if(userName == black_player){
-      player = 1
-    } else if(userName == white_player){
-      player = 2
-    }
     message = {"player": player, "x": coord['i'], "y": coord['j']}
     // var opponent = (player == JGO.BLACK) ? JGO.WHITE : JGO.BLACK;
 
@@ -59,7 +54,7 @@ jsetup.create('board', function(canvas) {
     lastHover = false;
 
     var play = jboard.playMove(coord, player, ko);
-    // console.log(play)
+    console.log(play)
 
     if(play.success) {
       chatSocket.send(JSON.stringify({
@@ -103,6 +98,13 @@ jsetup.create('board', function(canvas) {
 
       console.log('black:', black_player)
       console.log('white:', white_player)
+
+      if(userName == black_player){
+        player = 1
+      } else if(userName == white_player){
+        player = 2
+      }
+      alert(start_settings['alert'])
     }
     
     

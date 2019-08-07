@@ -19,6 +19,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # 룸이 이미 존재하는지 확인.
         if Room.objects.filter(room_name=self.room_name):
             self.room = Room.objects.get(room_name=self.room_name)
+            await self.accept()
             if self.room.player1:
                 self.room.player2 = str(self.user)
                 self.room.save()
@@ -27,11 +28,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 start_settings = {
                     'black': play_order[0],
                     'white': play_order[1],
+                    'alert': "match success",
                 }
-                await self.accept()
+                # await self.accept()
                 await self.send(text_data=json.dumps({
                     'start_settings': start_settings
                 }))
+            
             # else:
             #     self.room.player1 = str(self.user)
             #     self.room.save()
@@ -105,7 +108,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 self.omok.board[self.omok.y][self.omok.x] = 0
                 message['alert'] = "SamSam !! Try Again ! "
                 # continue
-            # self.omok.Playerchange()
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                }
+            )
+            self.omok.Playerchange()
 
         elif 'username' in text_data_json.keys():
             username = text_data_json['username']
@@ -128,4 +139,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         start_settings = event['start_settings']
         await self.send(text_data=json.dumps({
             'start_settings': start_settings
+        }))
+        
+    # Receive message from room group
+    async def chat_message(self, event):
+        message = event['message']
+        await self.send(text_data=json.dumps({
+            'message': message
         }))
