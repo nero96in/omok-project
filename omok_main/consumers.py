@@ -28,27 +28,39 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'black': play_order[0],
                     'white': play_order[1],
                 }
-
-                # await self.send(text_data=json.dumps({
-                #     'start_settings': start_settings
-                # }))
-            else:
-                self.room.player1 = str(self.user)
-                self.room.save()
+                await self.accept()
+                await self.send(text_data=json.dumps({
+                    'start_settings': start_settings
+                }))
+            # else:
+            #     self.room.player1 = str(self.user)
+            #     self.room.save()
+            #     await self.accept()
         else:
             new_room = Room(room_name=self.room_name)
             new_room.save()
+            self.room = Room.objects.get(room_name=self.room_name)
+            self.room.player1 = str(self.user)
+            self.room.save()
+            await self.accept()
 
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name,
         )
-        await self.accept()
-        if self.room.player1:
-            await self.send(text_data=json.dumps({
-                        'start_settings': start_settings
-                    }))
+        
+        # await self.channel_layer.group_send(
+        #         self.room_group_name,
+        #         {
+        #             'type': 'start_settings',
+        #             'start_settings': start_settings
+        #         }
+        #     )
+        # if self.room.player1:
+        #     self.send(text_data=json.dumps({
+        #                 'start_settings': start_settings
+        #             }))
         # if Black == None: Black = 1
         # else: White = 2
         
@@ -110,4 +122,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message
+        }))
+
+    async def start_settings(self, event):
+        start_settings = event['start_settings']
+        await self.send(text_data=json.dumps({
+            'start_settings': start_settings
         }))
