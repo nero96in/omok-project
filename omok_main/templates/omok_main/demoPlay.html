@@ -123,7 +123,7 @@ jsetup.create('board', function(canvas) {
     //console.log(lastX, lastY) 
 
     if(jboard.getType(coord) == JGO.CLEAR && jboard.getMark(coord) == JGO.MARK.NONE) {
-      jboard.setType(coord, player == JGO.WHITE ? JGO.DIM_WHITE : JGO.DIM_BLACK);
+      jboard.setType(coord, player);
       lastHover = true;
     } else
       lastHover = false;
