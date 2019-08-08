@@ -44,7 +44,7 @@ def waitingroom(request):
             new_room = Room(room_name=query)
             new_room.save()
             return render(request, 'waitingroom.html',{
-                # 'query' : query ,#방 생성
+                'query' : query ,#방 생성
                 'error_post' : "이(가) 생성되었습니다.",
                 'all_room': all_room,
             })
