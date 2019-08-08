@@ -1,18 +1,62 @@
+{% extends 'omok_main/base.html' %}
 {% load static %}
-<!DOCTYPE HTML>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Board</title>
-  <style>
-  body { text-align: center; }
-  div { margin: 20px auto; color: #888; }
-  </style>
-</head>
-<body>
 
-<div id="board"></div>
 
+{% block css %}
+  <link rel="stylesheet" href="{% static 'omok_main/play.css' %}">
+{% endblock css %}
+  
+
+{% block content %}
+<div id="main" class="d-flex justify-content-between align-items-center w-100">
+    <div id="player1">
+      <div class="player-profile card d-flex flex-column align-items-center" style="width: 18rem;">
+        <img src="{% static 'omok_main/sample_user.png' %}" class="card-img-top profile-image" alt="...">
+        <div class="card-body">
+          <h3 class="card-title text-center">player1</h3>
+        </div>
+        <div class="player-informations card-body pt-0">
+            <p class="card-text">
+              승:
+            </p>
+            <p class="card-text">
+              무:
+            </p>
+            <p class="card-text">
+              패:
+            </p>
+  
+          </div>
+      </div>
+    </div>
+    <div id="board"></div>
+    <div id="player2">
+      <div class="player-profile card d-flex flex-column align-items-center" style="width: 18rem;">
+          <img src="{% static 'omok_main/sample_user.png' %}" class="card-img-top profile-image" alt="...">
+          <div class="card-body">
+            <h3 class="card-title text-center">player2</h3>
+          </div>
+          <div class="player-informations card-body pt-0">
+            <p class="card-text">
+              승:
+            </p>
+            <p class="card-text">
+              무:
+            </p>
+            <p class="card-text">
+              패:
+            </p>
+  
+          </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+
+{% block extracode %}
 <script type="text/javascript" src="{% static 'omok_main/dist/jgoboard-latest.js' %}"></script>
 <script type="text/javascript" src="{% static 'omok_main/large/board.js' %}"></script>
 <script type="text/javascript">
@@ -161,6 +205,5 @@ jsetup.create('board', function(canvas) {
   });
 });
 </script>
-
-</body>
-</html>
+{% endblock extracode %}
+  
