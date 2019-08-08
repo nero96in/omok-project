@@ -148,3 +148,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# User settings
+AUTH_USER_MODEL = 'account.User'
