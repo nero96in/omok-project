@@ -2,6 +2,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 from omok_main.SongOmok import Omok
 from omok_main.models import Room
+from account.models import User
 import numpy as np
 import json
 import random
@@ -15,6 +16,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = 'chat_%s' % self.room_name
         self.user = self.scope["user"]
         print(self.user)
+        # a = User(username=str(self.user))
+        # print("win: ", a.win)
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -55,6 +58,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             'start_settings': start_settings,
                         }
                     )
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            'type': 'update_profile',
+                            'player1': self.room.player1,
+                            'player2': self.room.player2,
+                        }
+                    )
             elif self.room.player1 == str(self.user) or self.room.player2 == str(self.user): pass
 
         else:
@@ -64,24 +75,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room.player1 = str(self.user)
             self.room.save()
             await self.accept()
-
-        
-        
-        # await self.channel_layer.group_send(
-        #         self.room_group_name,
-        #         {
-        #             'type': 'start_settings',
-        #             'start_settings': start_settings
-        #         }
-        #     )
-        # if self.room.player1:
-        #     self.send(text_data=json.dumps({
-        #                 'start_settings': start_settings
-        #             }))
-        # if Black == None: Black = 1
-        # else: White = 2
-        
-        # print(Black, White)
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'update_profile',
+                    'player1': self.room.player1,
+                    'player2': self.room.player2,
+                }
+            )
 
     async def disconnect(self, close_code):
         # Leave room group
@@ -151,13 +152,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
     
 
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'message': message
-        }))
+        # await self.send(text_data=json.dumps({
+        #     'message': message
+        # }))
 
     async def start_settings(self, event):
         start_settings = event['start_settings']
         await self.send(text_data=json.dumps({
+            'type': 'start_settings',
             'start_settings': start_settings
         }))
         
@@ -168,11 +170,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event['message']
         message['current_player'] = self.current_player
         await self.send(text_data=json.dumps({
+            'type': 'chat_message',
             'message': message
         }))
 
     async def spectator_message(self, event):
         spectator = event['message']
         await self.send(text_data=json.dumps({
+            'type': 'spectator_message',
             'spectator': spectator
+        }))
+
+    async def update_profile(self, event):
+        player1 = User(username=self.room.player1)
+        player1_info = {
+            'username': self.room.player1,
+            'win': player1.win,
+            'draw': player1.draw, 
+            'lose': player1.lose, 
+        }
+        player2 = User(username=self.room.player2)
+        player2_info = {
+            'username': self.room.player2,
+            'win': player2.win,
+            'draw': player2.draw, 
+            'lose': player2.lose, 
+        }
+        print(player1_info, player2_info)
+        await self.send(text_data=json.dumps({
+            'type': 'update_profile',
+            'player1_info': player1_info,
+            'player2_info': player2_info
         }))

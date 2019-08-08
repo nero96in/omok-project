@@ -17,13 +17,13 @@
         </div>
         <div class="player-informations card-body pt-0">
             <p class="card-text">
-              승:
+              승: <span class="win pl-4">10</span>
             </p>
             <p class="card-text">
-              무:
+              무: <span class="win pl-4">0</span>
             </p>
             <p class="card-text">
-              패:
+              패: <span class="win pl-4">10</span>
             </p>
   
           </div>
@@ -38,13 +38,13 @@
           </div>
           <div class="player-informations card-body pt-0">
             <p class="card-text">
-              승:
+              승: <span class="win pl-4">10</span>
             </p>
             <p class="card-text">
-              무:
+              무: <span class="win pl-4">10</span>
             </p>
             <p class="card-text">
-              패:
+              패: <span class="win pl-4">10</span>
             </p>
   
           </div>
@@ -117,12 +117,11 @@ jsetup.create('board', function(canvas) {
 
   chatSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
-    var message = data['message'];
-    var start_settings = data['start_settings']
-    var spectator = data['spectator']
+    var type = data['type']
     // console.log(data)
     
-    if(message){
+    if(type == 'chat_message'){
+      var message = data['message'];
       console.log(message)
       console.log('wow')
       // player = message['player']
@@ -146,11 +145,13 @@ jsetup.create('board', function(canvas) {
       }
     }
 
-    if(spectator) {
+    if(type == 'spectator_message') {
+      var spectator = data['spectator']
       console.log(spectator, "님이 관전자로 입장하셨습니다.")
     }
 
-    if(start_settings) {
+    if(type == 'start_settings') {
+      var start_settings = data['start_settings']
       black_player = start_settings['black']
       white_player = start_settings['white']
       current_player = start_settings['current_player']
@@ -164,6 +165,11 @@ jsetup.create('board', function(canvas) {
         player = 2
       }
       alert(start_settings['alert'])
+    }
+
+    if(type == 'update_profile'){
+      var update_profile = data['update_profile']
+      console.log(update_profile)
     }
   };
 
