@@ -75,6 +75,7 @@ jsetup.create('board', function(canvas) {
     var data = JSON.parse(e.data);
     var message = data['message'];
     var start_settings = data['start_settings']
+    var spectator = data['spectator']
     // console.log(data)
     
     if(message){
@@ -99,6 +100,10 @@ jsetup.create('board', function(canvas) {
       if(message['alert']){
         alert(message['alert'])
       }
+    }
+
+    if(spectator) {
+      console.log(spectator, "님이 관전자로 입장하셨습니다.")
     }
 
     if(start_settings) {

@@ -24,4 +24,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('omok/', include('omok_main.urls')),
     path('account/', include('account.urls')),
+    path('waitingroom/', include('waitingroom.urls')),
 ]

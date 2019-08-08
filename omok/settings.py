@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'channels',
     'account',
     'omok_main',
+    'waitingroom',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

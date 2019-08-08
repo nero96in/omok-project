@@ -23,38 +23,40 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # 룸이 이미 존재하는지 확인.
         if Room.objects.filter(room_name=self.room_name):
-
             self.room = Room.objects.get(room_name=self.room_name)
-            await self.accept()
-            if self.room.player1:
-                self.room.player2 = str(self.user)
-                self.room.save()
-                
-                play_order = random.sample([self.room.player1, self.room.player2], 2)
-                start_settings = {
-                    'black': play_order[0],
-                    'white': play_order[1],
-                    'current_player': self.current_player,
-                    'alert': "match success",
-                }
-    
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'start_settings',
-                        'start_settings': start_settings,
-                    }
-                )
-    
-                # await self.accept()
-                # await self.send(text_data=json.dumps({
-                #     'start_settings': start_settings
-                # }))
             
-            # else:
-            #     self.room.player1 = str(self.user)
-            #     self.room.save()
-            #     await self.accept()
+            if self.room.player1 and self.room.player1 != str(self.user) and self.room.player2 != str(self.user):
+                # 두 플레이어 모두 존재하면 관전자로 입장
+                if self.room.player1 and self.room.player2:
+                    await self.accept()
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "spectator_message",
+                            "message": str(self.user),
+                        }
+                    )
+                else:
+                    self.room.player2 = str(self.user)
+                    self.room.save()
+                    
+                    play_order = random.sample([self.room.player1, self.room.player2], 2)
+                    start_settings = {
+                        'black': play_order[0],
+                        'white': play_order[1],
+                        'current_player': self.current_player,
+                        'alert': "match success",
+                    }
+                    await self.accept()
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            'type': 'start_settings',
+                            'start_settings': start_settings,
+                        }
+                    )
+            elif self.room.player1 == str(self.user) or self.room.player2 == str(self.user): pass
+
         else:
             new_room = Room(room_name=self.room_name)
             new_room.save()
@@ -99,13 +101,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             player = message['player']
             x = message['x']
             y = message['y']
-            
 
-            
-
-            
-
-            
             self.omok.Put_omok(player, x, y)
             # print(self.omok.x, self.omok.y)
             col,row,digonal_1,digonal_2 = self.omok.Trace()
@@ -173,4 +169,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message['current_player'] = self.current_player
         await self.send(text_data=json.dumps({
             'message': message
+        }))
+
+    async def spectator_message(self, event):
+        spectator = event['message']
+        await self.send(text_data=json.dumps({
+            'spectator': spectator
         }))
