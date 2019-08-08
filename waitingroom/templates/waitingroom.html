@@ -1,216 +1,123 @@
-<!doctype html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v3.8.5">
-    <title>waiting room</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/album/">
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-    <!-- Custom styles for this template -->
-    <link href="album.css" rel="stylesheet">
-  </head>
-  <body>
+<head>
+      
+    <script defer src="https://use.fontawesome.com/releases/v5.10.1/js/all.js" integrity="sha384-aC/bNmpJEYrEVX5KNHN+m0CmvycQX9wDnYv8X2gdXQjrbtDP5OcU5DRiXwL6bPwr" crossorigin="anonymous"></script>
+    <link href= "https://fonts.googleapis.com/css?family=Do+Hyeon|Nanum+Gothic+Coding&display=swap"  rel="stylesheet">  
     
-
-    <main role="main">
-      <section class="jumbotron text-center">
+    <link rel="stylesheet" href="{% static 'omok_main/searchdesign.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SEARCH</title>
+    <link rel="stylesheet" href="{% static 'omok_main/bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body>
         <div class="container">
-          <h1 class="jumbotron-heading"><a href="/waitingroom/">나를 누르면 게임방을 전부 볼수있지</a></h1>
-          <p class="lead text-muted"><a href="/">나를 누르면 홈화면으로 갈수있지</a></p>
-          <p>
-          <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#exampleModal">
-            방을만들어라
-          </button>
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <!-- 방 만들기 -->
-                <form action="{% url 'waitingroom' %}" method="POST">
-                  {% csrf_token %}
-                  <div class="modal-body">
-                    What chat room would you like to enter?<br/>
-                    <input id="room-name-input" type="text" size="10" name="check_room" value=""/><br/>
-                    <input id="room-name-submit" type="submit" value="Enter"/>
-                  </div>
-                </form>
-                
-                      
-                    
-              
-                  <!-- <script>
-                    document.querySelector('#room-name-input').focus();
-                    document.querySelector('#room-name-input').onkeyup = function(e) {
-                        if (e.keyCode === 13) {  // enter, return
-                            document.querySelector('#room-name-submit').click();
-                        }
-                    };
+            <div class="top">
+            <h1 class="title">게임 만들기</h1>
+            <form action="{% url 'waitingroom' %}" method="POST">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center align-items-center">
+                        <input type="text" class="form-control col-md-4" style="border-bottom-right-radius: 0px; border-top-right-radius: 0px; border-right-color: white; border-right-width: 0px; outline: none !important; box-shadow: none !important;" placeholder="이곳에 ID를 입력하세요" autocomplete="on" name="check_room">
+                        <div class="d-flex iicon align-items-center" style="border-left-width: 0px;">
+                          <input type="submit" value="검색" style="background-color:transparent;">
 
-                    document.querySelector('#room-name-submit').onclick = function(e) {
-                        var roomName = document.querySelector('#room-name-input').value;
-                        window.location.pathname = '/waitingroom/' + roomName + '/';
-                    }; -->
+                          <!-- <a href="#"><i class="fas fa-search" style="font-size: 25px ; color:black; padding-right: 5px;"></i></a> -->
+                        </div>
+                </div>  
+            </form>
+            <br>
+            </div>
+        </div>
 
-                    
 
-                  <!-- </script> -->
-                </div>
-              </div>
+        <div class="container">
+            <div class="top">
+            <h1 class="title">게임 찾기</h1>
+            <form action="" method="GET">
+                <div class="d-flex justify-content-center align-items-center">
+                        <input type="text" class="form-control col-md-4" style="border-bottom-right-radius: 0px; border-top-right-radius: 0px; border-right-color: white; border-right-width: 0px; outline: none !important; box-shadow: none !important;" placeholder="이곳에 ID를 입력하세요" autocomplete="on" name="search_word" value="{{search_word}}">
+                        <div class="d-flex iicon align-items-center">
+                          <input type="submit" value="검색">
+                          <!-- <a href="#"><i class="fas fa-search" style="font-size: 25px ; color:black; padding-right: 5px;"></i></a> -->
+                        </div>
+                </div>  
+            </form>
+            <br>
+            </div>
+        </div>
+    <div class="container">
+        <div class="botto">
+            
+            <h1 class="title">게임 전체보기</h1>
+            
+        </div>
+      {% if check_room %}
+          <h3>{{check_room}} {{error_post}}</h3>
+          {% for room in all_room %}
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{room.room_name}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{room.room_name}}</h6>
+              <p class="card-text">랭킹/관전자수.</p>
+              <a href="#" class="card-link">참가</a>
+              <a href="#" class="card-link">관전</a>
             </div>
           </div>
-          <a href="#" class="btn btn-secondary my-2">랭크전</a>
-          </p>
-        </div>
-      </section>
+        {% endfor %}
       
-      <div class="container" style="display: inline-block;text-align: center;">
-        <form action="" method="GET">
-          <input type="text" name="search_word" value="{{search_word}}">
-          <input type="submit" value="검색">
-        </form>
-      </div>
-      <br><br>
-      <div class="container" style="display: inline-block;text-align: center;">
+      {% elif query %}
+        <h3>{{query}} {{error_post}}</h3>
         
-          
-          {% comment %} post 일때 {% endcomment %}
-          {% if check_room %} {% comment %} 방이 이미 존재함 {% endcomment %}
-            <h3>{{check_room}} {{error_post}}</h3>
-            <div class="album py-5 bg-light">
-              <div class="container">
-                <div class="row">
-                  {% for room in all_room %} 
-                    <div class="col-md-4">
-                      <div class="card mb-4 shadow-sm">
-                        <div class="card-body">
-                          <p class="card-text">{{ room.room_name }}</p>
-                          <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.pathname = '/waitingroom/' + {{room.room_name}} + '/'">
-                                참여
-                              </button>
-                              
-                              <button type="button" class="btn btn-sm btn-outline-secondary">
-                                관전
-                              </button>
-                            </div>
-                            <small class="text-muted">랭킹/관전자수</small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  {% endfor %} 
-                </div>
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{query}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{query}}</h6>
+              <p class="card-text">랭킹/관전자수.</p>
+              <a href="#" class="card-link">참가</a>
+              <a href="#" class="card-link">관전</a>
+            </div>
+          </div>
+      {% endif %}
+
+        {%if search_room %} 
+          {% for room in search_room %} 
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">{{room.room_name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{room.room_name}}</h6>
+                <p class="card-text">랭킹/관전자수.</p>
+                <a href="#" class="card-link">참가</a>
+                <a href="#" class="card-link">관전</a>
               </div>
             </div>
-          {% elif query %}
-          <h3>{{query}} {{error_post}}</h3> {% comment %} 새로운 방이 생성됨 {% endcomment %}
-            <div class="album py-5 bg-light">
-              <div class="container">
-                <div class="row">
-                  
-
-
-                  {% comment %} {% for room in query %}  {% endcomment %}
-                    <div class="col-md-4">
-                      <div class="card mb-4 shadow-sm">
-                        <div class="card-body">
-                          <p class="card-text">{{ query }}</p>
-                          <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.pathname = '/waitingroom/' + {{query}} + '/'">
-                                참여
-                              </button>
-                              
-                              <button type="button" class="btn btn-sm btn-outline-secondary">
-                                관전
-                              </button>
-                            </div>
-                            <small class="text-muted">랭킹/관전자수</small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  {% comment %} {% endfor %}   {% endcomment %}
-                </div>
-              </div>
-            </div>
-          {% endif %}
-
-      </div>
-    
-      <div class="album py-5 bg-light">
-        <div class="container">
-          <div class="row">
-            {% if search_room %} 
-              {% for room in search_room  %} 
-                <div class="col-md-4">
-                  <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                      <p class="card-text">{{ room.room_name }}</p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.pathname = '/waitingroom/' + {{room.room_name}} + '/'">
-                            참여
-                          </button>
-                          
-                          <button type="button" class="btn btn-sm btn-outline-secondary">
-                            관전
-                          </button>
-                        </div>
-                        <small class="text-muted">랭킹/관전자수</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              {% endfor %} 
+            {% endfor %} 
             {% else %} 
             <div class="container" style="display: inline-block;text-align: center;">
-              <h1> {{search_word}} {{error}}</h1>
+            <h1> {{search_word}} {{error}}</h1>
             </div>
             {% endif %} 
 
-      </div>
-    </div>
-  </div>
 
-  
-  
-</main>
-
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-      <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script></body>
+          <!-- <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item disabled" style="outline: none !important; box-shadow: none !important;">
+                <a class="page-link" href="#" tabindex="-1" style="outline: none !important; box-shadow: none !important;">Previous</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#" style="outline: none !important; box-shadow: none !important;">1</a></li>
+              <li class="page-item"><a class="page-link" href="#" style="outline: none !important; box-shadow: none !important;">2</a></li>
+              <li class="page-item"><a class="page-link" href="#" style="outline: none !important; box-shadow: none !important;">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#" style="outline: none !important; box-shadow: none !important;">Next</a>
+              </li>
+            </ul>
+          </nav> -->
+        
+    </div>       
+    <script src="{% static 'omok_main/jquery/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'omok_main/bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
 </html>

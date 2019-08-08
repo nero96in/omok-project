@@ -1,0 +1,81 @@
+.container
+{
+    text-align: center;
+
+}
+.title
+{
+    
+font-size: 1.5cm;
+font-family: 'Do Hyeon', sans-serif;
+
+}
+.top
+{    
+    margin-top: 15px;
+    border-radius: 0px;    
+    height: 250px;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px; 
+}
+.table
+{
+    font-family: 'Nanum Gothic Coding', monospace;
+}
+.botto
+{
+    margin-top: 10px;
+    border-radius: 0px; 
+    height: 500px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+
+.iicon
+{
+    border: 1px solid #ced4da;
+    border-top-color: rgb(206, 212, 218);
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-right-color: rgb(206, 212, 218);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-bottom-color: rgb(206, 212, 218);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color:white;
+    border-left-style: none;
+    border-left-width: 0px;
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    border-radius: .25rem;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: 0px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition-property: border-color, box-shadow;
+    height: calc(1.5em + .75rem + 2px);
+}
+
+.form-control:focus {
+   
+    border-color:rgb(206, 212, 218) !important;
+   
+}
+.page-link:focus
+{
+    border-color:rgb(206, 212, 218) !important;
+
+}
+.page-item:focus
+{
+    border-color:rgb(206, 212, 218) !important;
+
+}
