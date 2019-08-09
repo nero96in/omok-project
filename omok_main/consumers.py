@@ -330,6 +330,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'type': 'chat_message',
             'message': message
         }))
+        await self.send(text_data=json.dumps({
+            'type': 'load_board',
+            'load_board': self.room.omok_board
+        }))
 
     async def spectator_message(self, event):
         spectator = event['message']

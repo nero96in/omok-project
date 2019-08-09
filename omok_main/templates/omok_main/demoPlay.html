@@ -212,6 +212,7 @@ jsetup.create('board', function(canvas) {
 
     if(type == 'load_board'){
       var load_board = data['load_board']
+      console.log(load_board)
       coords = load_board.split(';')
       console.log(coords)
       for(var i=0; i<coords.length-1; i++){
@@ -221,6 +222,10 @@ jsetup.create('board', function(canvas) {
         console.log(player, coord)
         jboard.setType(coord, player)
       }
+      var message = data['message'];
+      console.log(message)
+      // current_player = message['current_player']
+      
     }
   };
 
