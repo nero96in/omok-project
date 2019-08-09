@@ -1,5 +1,4 @@
 from django.db import models
-from account.models import User
 
 # Create your models here.
 class Room(models.Model):
@@ -18,4 +17,6 @@ class Room(models.Model):
         )
     winner = models.CharField(max_length=255, null=True)
     is_playing = models.BooleanField(default=False)
+    is_waiting = models.BooleanField(default=False)
     omok_board = models.TextField(null=True, default='')
+            

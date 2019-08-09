@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
 from omok_main.models import Room
 import json
@@ -13,10 +13,13 @@ def index(request):
 def room(request, room_name):
     username = None
     room = Room.objects.get(room_name=room_name)
-    if request.user.is_authenticated:
-        username = request.user.username
-    return render(request, 'omok_main/demoPlay.html', {
-        'room_name_json': mark_safe(json.dumps(room_name)),
-        'user_name_json': mark_safe(json.dumps(username)),
-        'room': room
-    })
+    if room:
+        if request.user.is_authenticated:
+            username = request.user.username
+        return render(request, 'omok_main/demoPlay.html', {
+            'room_name_json': mark_safe(json.dumps(room_name)),
+            'user_name_json': mark_safe(json.dumps(username)),
+            'room': room
+        })
+    else:
+        return redirect('/waitingroom/')

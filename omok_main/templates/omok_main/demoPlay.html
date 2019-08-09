@@ -60,6 +60,8 @@
 <script type="text/javascript" src="{% static 'omok_main/dist/jgoboard-latest.js' %}"></script>
 <script type="text/javascript" src="{% static 'omok_main/large/board.js' %}"></script>
 <script type="text/javascript">
+
+
 var roomName = {{ room_name_json }};
 var userName = {{ user_name_json }};
 
@@ -81,14 +83,12 @@ var white_player = undefined
 var ko = false, lastMove = false; // ko coordinate and last move coordinate
 var lastHover = false, lastX = -1, lastY = -1; // hover helper vars
 jsetup.setOptions({stars: {points:5}});
+$(document).ready(function() {
+
 jsetup.create('board', function(canvas) {
   var chatSocket = new WebSocket(
         'ws://' + window.location.host +
         '/ws/omok/' + roomName + '/');
-
-  chatSocket.onclose = function(e) {
-    console.error('Chat socket closed unexpectedly');
-  };
 
   canvas.addListener('click', function(coord, ev) {
     if(current_player != player | player == undefined || is_playing == false){
@@ -260,7 +260,14 @@ jsetup.create('board', function(canvas) {
 
     lastHover = false;
   });
+  
+  
 });
+  window.onbeforeunload = function() {
+        return "정말 새로고침 하시겠어요? 새로고침을 하면 패배처리될 수 있습니다!";
+    }
+
+})
 </script>
 {% endblock extracode %}
   

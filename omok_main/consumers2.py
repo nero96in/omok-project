@@ -16,6 +16,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = 'chat_%s' % self.room_name
         self.user = self.scope["user"]
         print(self.user)
+        # a = User(username=str(self.user))
+        # print("win: ", a.win)
+        # Join room group
 
         # 룸이 이미 존재하는지 확인.
         if Room.objects.filter(room_name=self.room_name):
@@ -24,11 +27,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
             else: player1_name = None
             if self.room.player2: player2_name = self.room.player2.username
             else: player2_name = None
-            print("111", player1_name, player2_name)
+            print("1", self.user)
+            print("player1_name:", player1_name)
+            print("player2_name:", player2_name)
+            print("99", not self.room.player1)
+            print("100", not self.room.player2)
 
             if (self.room.player1 or self.room.player2) and player1_name != str(self.user) and player2_name != str(self.user):
                 # 두 플레이어 모두 존재하면 관전자로 입장
                 if self.room.player1 and self.room.player2:
+                    print("2", self.user)
                     await self.channel_layer.group_add(
                         self.room_group_name,
                         self.channel_name,
@@ -49,16 +57,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 
                 # 둘 중 하나만 존재하지 않을 때.
                 else:
-                    if not self.room.player2:
-                        self.room.player2 = User.objects.get(username=str(self.user))
-                        self.room.player2.current_room = self.room_name
-                        self.room.player2.save()
-                    elif not self.room.player1:
-                        self.room.player1 = User.objects.get(username=str(self.user))
-                        self.room.player1.current_room = self.room_name
-                        self.room.player1.save()
-                    print("hey!", self.room.player2.current_room, self.room.player1.current_room)
-
+                    print("4", self.user)
+                    if not self.room.player2: self.room.player2 = User.objects.get(username=str(self.user))
+                    elif not self.room.player1: self.room.player1 = User.objects.get(username=str(self.user))
                     self.room.is_playing = True
                     self.room.save()
                     
@@ -90,25 +91,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         }
                     )
             elif player1_name == str(self.user) or player2_name == str(self.user):
-                print("222", player1_name, player2_name)
+                print("5", self.user)
                 await self.accept()
-                await self.channel_layer.group_add(
-                        self.room_group_name,
-                        self.channel_name,
-                    )
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
                         'type': 'update_profile',
                         # 'player1': self.room.player1,
                         # 'player2': self.room.player2,
-                    }
-                )
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "spectator_message",
-                        "message": str(self.user),
                     }
                 )
                 await self.send(text_data=json.dumps({
@@ -120,8 +110,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             elif (not self.room.player1) and (not self.room.player2):
                 print("3", self.user)
                 self.room.player1 = User.objects.get(username=str(self.user))
-                self.room.player1.current_room = self.room_name
-                self.room.player1.save()
                 self.room.save()
                 await self.channel_layer.group_add(
                     self.room_group_name,
@@ -143,8 +131,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             try: 
                 self.room = Room.objects.get(room_name=self.room_name)
                 self.room.player1 = User.objects.get(username=str(self.user))
-                self.room.player1.current_room = self.room_name
-                self.room.player1.save()
                 self.room.save()
                 await self.channel_layer.group_add(
                     self.room_group_name,
@@ -187,14 +173,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     self.room.is_playing = False
                     lose_user = self.scope["user"].username
                     if self.scope["user"].username == player1_name:
-                        self.room.player1.current_room = None
-                        self.room.player1.save()
                         self.room.player1 = None
                         self.room.save()
                         win_user = player2_name
                     elif self.scope["user"].username == player2_name:
-                        self.room.player2.current_room = None
-                        self.room.player2.save()
                         self.room.player2 = None
                         self.room.save()
                         win_user = player1_name
@@ -222,27 +204,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
             else:
                 if self.scope["user"].username == player1_name:
                     print(self.scope["user"].username, player1_name)
-                    self.room.player1.current_room = None
-                    self.room.player1.save()
                     self.room.player1 = None
                     self.room.save()
                 if self.scope["user"].username == player2_name:
                     print(self.scope["user"].username, player2_name)
-                    self.room.player2.current_room = None
-                    self.room.player2.save()
                     self.room.player2 = None
                     self.room.save()
+                if not self.room.player1 and not self.room.player2:
+                    self.room.delete()
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
-                    'type': 'update_profile',
-                    # 'player1': self.room.player1,
-                    # 'player2': self.room.player2,
+                        'type': 'update_profile',
+                        # 'player1': self.room.player1,
+                        # 'player2': self.room.player2,
                     }
                 )
-                if not self.room.player1 and not self.room.player2:
-                    self.room.delete()
-                
                 await self.channel_layer.group_discard(
                     self.room_group_name,
                     self.channel_name
