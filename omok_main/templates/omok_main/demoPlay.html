@@ -255,6 +255,9 @@ jsetup.create('board', function(canvas) {
   });
 
   canvas.addListener('mouseout', function(ev) {
+    if(current_player != player | player == undefined || is_playing == false){
+      return 
+    }
     if(lastHover)
       jboard.setType(new JGO.Coordinate(lastX, lastY), JGO.CLEAR);
 
