@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-# from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth import login as django_login, logout as django_logout, authenticate
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .form import LoginForm, SignupForm
 from .models import User
 from django.db import connection
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
 
 # Create your views here.
 
@@ -59,6 +60,8 @@ def login(request):
     }
     return render(request, 'login.html', context)
 
+
+
 def logout(request):
     if request.method == 'POST':
         auth.logout(request)
@@ -66,27 +69,61 @@ def logout(request):
     return render(request, 'signup.html')
 
 def ranking(request):
-    all_user = User.objects.all()
-    sorted_all_users_queries = User.objects.all().order_by('-win')
-    page = request.GET.get('page', 1)
-    paginator = Paginator(sorted_all_users_queries, 20)
-    rankings = range(1, len(sorted_all_users_queries)+1)
-
-    try:
-        sorted_users = paginator.page(page)
-    except PageNotAnInteger:
-        sorted_users = paginator.page(1)
-    except EmptyPage:
-        sorted_users = paginator.page(paginator.num_pages)
     
-    # paginator=Paginator(sorted_all_users_queries,7)
-    # page=request.GET.get('page')
-    # posts=paginator.get_page(page)
+
+
+    all_user = User.objects.all()
+    # dddddddddddddddd
+    
+    # win_query = User.objects.all().values_list('win', flat=True) 
+    win_query = User.objects.values_list('win', flat=True).order_by('-win')
+    nickname_query = User.objects.order_by('-win').values_list('nickname',flat=True)
+    win=[]
+    nickname=[]
+    for i in range(0,len(win_query)):
+        win.append(win_query[i])
+        nickname.append(nickname_query[i])
+    print(nickname)
+    print(win)
+    count = 0 
+    rank = []
+    for i in range(0,len(win)):
+        if i > 0:
+            if win[i] == win[i-1]:
+                rank.append(rank[count])
+                continue
+        rank.append(i+1)
+        count = i
+    print(rank)
+    # win=User.objects.all().order_by('-win')
+    for i in range(0, len(win)):
+        some_user = User.objects.get(nickname=nickname[i])
+        some_user.rank = rank[i]
+        some_user.save()
+    length = len(win)
+    
+        
+    
+    # ddddddddddddddddddd
+
+
+    sort=User.objects.all().order_by('rank')
+    paginator = Paginator(sort, 1000)
+    page = request.POST.get('page','1')
+    try:
+        sort = paginator.page(page)
+    except PageNotAnInteger:
+        sort = paginator.page(1)
+    except EmptyPage:
+        sort = paginator.page(paginator.num_pages)
+
+    
     
     if request.method == "GET":   
         return render(request, "ranking.html",{
-
-                'sorted_users':sorted_users,
+                'all_user':all_user, 
+                'sort':sort,
+                'length':length,
                 })
     elif request.method == "POST":
         query = request.POST['query']
@@ -95,24 +132,57 @@ def ranking(request):
         return render(request, "ranking.html",{
                 'all_user':all_user, 
                 'search_nick' : search_nick, 
-                'sort' : sorted_all_users_queries,
+                'sort':sort,
                 })
         
 
 
-# def search(request):
-#     user = User.objects.all()
-#     saved_nick=User.objects.all()
-#     search_nick=request.GET.get('bar','')
 
-#     if search_nick:
-#         search_nick=user.filter(saved_nick=search_nick)
+def search(request):
+    user = User.objects.all()   
+    saved_nick=User.objects.all()
+    search_nick=request.GET.get('bar','')
 
-#     return render(request, "ranking.html",{
-#             'user' : user, 
-#             'saved_nick' : saved_nick,
-#             'search_nick' : search_nick, 
-#         })
+    if search_nick:
+        search_nick=user.filter(saved_nick=search_nick)
+
+    return render(request, "ranking.html",{
+            'user':user, 
+            'saved_nick':saved_nick,
+            'search_nick' : search_nick, })
+
+
+# def post_list(request):
+#     post_list = User.objects.all().order_by('-created_date')
+#     paginator = Paginator(post_list, 10)
+#     page = request.POST.get('page','1')
+#     try:
+#         post_list = paginator.page(page)
+#     except PageNotAnInteger:
+#         post_list = paginator.page(1)
+#     except EmptyPage:
+#         post_list = paginator.page(paginator.num_pages)
+
+#     context = {'post_list':post_list}
+#     return render(request, 'ranking.html', context)
+
+def rank_list_ajax(request): #Ajax 로 호출하는 함수
+    sort=User.objects.all().order_by('rank')
+    paginator = Paginator(sort, 3)
+    page = request.POST.get('page','1')
+    nickname = User.objects.all()
+
+    try:
+        sort = paginator.page(page)
+    except PageNotAnInteger:
+        sort = paginator.page(1)
+    except EmptyPage:
+        sort = paginator.page(paginator.num_pages)
+
+    context = {'sort':sort,
+                'nickname':nickname
+            }
+    return render(request, 'rank_list_ajax.html', context) #Ajax 로 호출하는 템플릿은 _ajax로 표시.
 
 
 

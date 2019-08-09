@@ -1,3 +1,7 @@
+
+    
+    
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,56 +13,68 @@
     
     {% block css %}
     <link rel="stylesheet" href="{% static 'omok_main/searchdesign.css' %}">
-{% endblock css %}
+    {% endblock css %}
+    <script src="{% static 'omok_main/js/ie-emulation-modes-warning.js' %}"></script>
+    
+
+
     <meta charset="UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>SEARCH</title>
     <link rel="stylesheet" href= "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src= "https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+
+
+
 
 </head>
 <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="{% url 'home' %}">오목하게 만들어주겠어 펀-치</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-item nav-link" href="/account/ranking/">Rank</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-item nav-link" href="#">About Us</a>
-                        </li>
-                        {% if user.is_authenticated %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">환영합니다. {{ user.username }} 님!</a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/waitingroom/">한판하실?</a>
-                                <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">Logout</a>
-                                <form id="logout" method="POST" action="{% url 'logout' %}">
-                                    {% csrf_token %} <input type="hidden" />
-                                </form>
-                            </div>
-                        </li>
-                        {% else %}
-                        <li class="nav-item">
-                            <a class="nav-item nav-link" href="{% url 'signup' %}">Signup</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                        </li>
-                        {% endif %}
-                    </ul>
+                <div class="container">
+                    <a class="navbar-brand" href="{% url 'home' %}">오목하게 만들어주겠어 펀-치</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="/account/ranking/">Rank</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="#">About Us</a>
+                            </li>
+                            {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">환영합니다. {{ user.username }} 님!</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="/waitingroom/">한판하실?</a>
+                                    <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+                                    <form id="logout" method="POST" action="{% url 'logout' %}">
+                                        {% csrf_token %} <input type="hidden" />
+                                    </form>
+                                </div>
+                            </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="{% url 'signup' %}">Signup</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>    
+            </nav>    
+
+           
         <div class="container">
         
             
@@ -113,7 +129,76 @@
         </div>
         
     </div>
-    <div class="container">
+    <div class="row">
+        <div class="container">
+            <div class="botto">
+                <h1 class="title">랭킹 전체보기</h1>
+                <table class="table">
+                        <thead>
+                            <tr>
+                                <td><B>랭킹</B></td>
+                                <td><B>닉네임</B></td>
+                                <td><B>승</B></td>
+                                <td><B>패</B></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ranki in sort %}
+                            <tr>
+                                <td>{{ranki.rank}}</td>
+                                <td> {{ranki.nickname}}</td>
+                                <td>{{ranki.win}}</td>
+                                <td>{{ranki.lose}}</td>
+                            </tr>
+                            {% endfor %}
+                        <tbody>
+                </table>
+                
+                <div id="rank_list_ajax"></div>
+                <!-- Ajax 결과물을 추가할 곳 -->
+            </div>
+        </div>
+    </div>
+        <input id="page" type="hidden" value="2"> <!--페이지 정보를 입력할 곳--> 
+        <!-- <button id="callmorepost" type="button" class="btn btn-primary btn-block">More Post</button> 페이지 스크롤 이벤트가 작동하지 않을 경우 클릭함. -->
+        <script src="{% static 'omok_main/js/jquery.min.js' %}"></script>
+        <script>
+            //scroll event
+            $('#callmorepost').click(function(){
+                var page = $("#page").val();
+                callMorePostAjax(page);
+                $("#page").val(parseInt(page)+1);
+            });
+        
+            $(window).scroll(function(){
+                var scrollHeight = $(window).scrollTop() + $(window).height();
+                var documentHeight = $(document).height();
+                
+                if (scrollHeight + 300 >= documentHeight){
+                    var page = $("#page").val();
+                    callMorePostAjax(page);
+                    $("#page").val(parseInt(page)+1);
+                }
+            });
+        
+            function callMorePostAjax(page) {
+                $.ajax( {
+                type : 'POST',
+                url: "{% url 'rank_list_ajax' %}",
+                data: {
+                'page': page,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: addMorePostAjax,
+                dataType: 'html'
+                });
+            }
+        
+            function addMorePostAjax(data, textStatus, jqXHR) {
+                $('#rank_list_ajax').append(data);
+            } 
+        </script>
+    <!-- <div class="container">
         <div class="botto">
             
             <h1 class="title">랭킹 전체보기</h1>
@@ -131,7 +216,7 @@
                         <tbody>
                         {% for ranki in posts %}
                         <tr>
-                            <td>{{forloop.counter}}위</td>
+                            <td>{{current_rank}}위</td>
                             <td> {{ranki.nickname}}</td>
                             <td>{{ranki.win}}</td>
                             <td>{{ranki.lose}}</td>
@@ -140,60 +225,7 @@
                         {% endfor %}
                     <tbody>
                 </table>
-    </div>
-    <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-              <li class="page-item disabled" style="outline: none !important; box-shadow: none !important;">
-                {% if posts.has_previous %}
-                <li ><a href="?page=1" style="outline: none !important; box-shadow: none !important; ">First</a></li>
-                <a href="?page={{posts.previous_page_number}}" style="outline: none !important; box-shadow: none !important;  margin-left: 10px; margin-right: 10px;">Previous</a>
-                {% endif %}
-              </li>
-              <span>{{posts.number}}</span>
-              <span>of</span>
-              <span>{{posts.paginator.num_pages}}</span>
-              
-
-              <li>
-                  {% if posts.has_next%}
-                <a href="?page={{posts.next_page_number}}" style="outline: none !important; box-shadow: none !important;  margin-left: 10px;">Next</a>
-                
-                {% endif %}
-                <a  href="?page={{posts.paginator.num_pages}}" style="outline: none !important; box-shadow: none !important; margin-left: 10px;">Last</a>
-              </li>
-            </ul>
-          </nav>
-        </div> 
-    
-
-    <div class="infinite-container">
-        {% for user in sorted_users %}
-        <div class="infinite-item">{{ forloop.counter|add:page.paginator.count }}</div>
-        {% endfor %}
-    </div>
-
-    {% if sorted_users.has_next %}
-    <a class="infinite-more-link" href="?page={{ sorted_users.next_page_number }}">More</a>
-    {% endif %}
-
-    <div class="loading" style="display: none;">
-        Loading...
-    </div>
-    <script src="{% static 'omok_main/jquery/jquery-3.4.1.min.js' %}"></script>
-    <script src="{% static 'account/jquery.waypoints.min.js' %}"></script>
-    <script src="{% static 'account/infinite.js' %}"></script>
-    <script>
-        var infinite = new Waypoint.Infinite({
-            element: $('.infinite-container')[0],
-            onBeforePageLoad: function () {
-                $('.loading').show();
-            },
-            onAfterPageLoad: function ($items) {
-                $('.loading').hide();
-            }
-            });
-    </script>
-    
-
+    </div> -->
+        </div>       
 </body>
 </html>

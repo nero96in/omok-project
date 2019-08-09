@@ -49,6 +49,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 
                 # 둘 중 하나만 존재하지 않을 때.
                 else:
+                    await self.accept()
                     if not self.room.player2:
                         self.room.player2 = User.objects.get(username=str(self.user))
                         self.room.player2.current_room = self.room_name
@@ -63,17 +64,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     self.room.save()
                     
                     self.play_order = random.sample([self.room.player1, self.room.player2], 2)
+                    print(self.play_order)
                     start_settings = {
                         'black': self.play_order[0].username,
                         'white': self.play_order[1].username,
                         'current_player': self.current_player,
                         'alert': "match success",
                     }
+                    
                     await self.channel_layer.group_add(
                         self.room_group_name,
                         self.channel_name,
                     )
-                    await self.accept()
+                    
                     await self.channel_layer.group_send(
                         self.room_group_name,
                         {
@@ -277,7 +280,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 print(self.omok.Color , " Win!")
                 message['alert'] = self.omok.Color , " Win!"
                 if self.omok.Color == "black":
-                    # self.room = Room.objects.get(room_name=self.room_name)
+                    self.room = Room.objects.get(room_name=self.room_name)
                     win_user = self.play_order[0].username
                     lose_user = self.play_order[1].username
                 elif self.omok.Color == "white":

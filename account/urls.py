@@ -7,8 +7,7 @@ urlpatterns = [
     path('login/', views.login, name="login"),
     path('logout/', views.logout, name="logout"),
     path('ranking/',views.ranking, name="ranking"),
-    # path('search/',views.search,name="search"),
-    #url(r'^search', SearchFormView.as_view, name='search'),
+    path('rank_list_ajax', views.rank_list_ajax, name="rank_list_ajax"),
     
 ]
 

@@ -1,0 +1,52 @@
+
+    
+{% if not nickname %}
+    <table class="table">
+            <thead>
+                <tr>
+                    <td><B>랭킹</B></td>
+                    <td><B>닉네임</B></td>
+                    <td><B>승</B></td>
+                    <td><B>패</B></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Do Data</td>
+                    <td>Do Data</td>
+                    <td>Do Data</td>
+                    <td>Do Data</td>
+                </tr>
+            <tbody>
+    </table>
+        
+{% else %}
+
+    <!-- <div class="row">
+        <div class="container">
+            <div class="botto"> -->
+                <table class="table">
+                        <thead>
+                            <tr>
+                                <td><B>랭킹</B></td>
+                                <td><B>닉네임</B></td>
+                                <td><B>승</B></td>
+                                <td><B>패</B></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ranki in sort %}
+                            <tr>
+                                <td>{{ranki.rank}}</td>
+                                <td>{{ranki.nickname}}</td>
+                                <td>{{ranki.win}}</td>
+                                <td>{{ranki.lose}}</td>
+                            </tr>
+                            {% endfor %}
+                        <tbody>
+                </table>
+            <!-- </div>
+        </div>
+    </div> -->
+{% endif %}
+

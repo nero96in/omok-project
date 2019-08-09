@@ -40,6 +40,11 @@ class User(AbstractUser):
         default='',
         null=True,
     )
+
+    rank = models.IntegerField(
+        default=0,
+    )
+    
     objects = UserManager()
 
     def __str__(self):
