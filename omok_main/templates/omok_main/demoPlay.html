@@ -255,7 +255,7 @@ jsetup.create('board', function(canvas) {
   });
 
   canvas.addListener('mouseout', function(ev) {
-    if(current_player != player | player == undefined || is_playing == false){
+    if(current_player != player || is_playing == false){
       return 
     }
     if(lastHover)
