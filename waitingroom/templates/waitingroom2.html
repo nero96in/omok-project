@@ -36,7 +36,7 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">환영합니다. {{ user.username }} 님!</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/waitingroom">한판하실?</a>
+                            <a class="dropdown-item" href="waitingroom/">한판하실?</a>
                             <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">Logout</a>
                             <form id="logout" method="POST" action="{% url 'logout' %}">
                                 {% csrf_token %} <input type="hidden" />
@@ -112,13 +112,13 @@
           <div class="card col-md-4 " style="width: 18rem;">
             <div class="card-body">
               <h5 class="card-title">{{room.room_name}}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">0연승</h6>
-              <p class="card-text">{{room.player1}} vs {{room.player2}}</p>
-              <a href="/waitingroom/{{room.room_name}}" class="card-link">참가</a>
+              <h6 class="card-subtitle mb-2 text-muted">{{room.room_name}}</h6>
+              <p class="card-text">랭킹/관전자수.</p>
+              <a href="/waitingroom/{{room.room_name}}"  class="card-link">참가</a>
               <a href="#" class="card-link">관전</a>
             </div>
           </div>
-        {% endfor %}
+          {% endfor %}
       
       {% elif query %}
       <div class="container"  style="display: inline-block;text-align: center; color: red;"></div>
@@ -128,36 +128,36 @@
           <div class="card col-md-4 " style="width: 18rem;">
             <div class="card-body">
               <h5 class="card-title">{{query}}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">0연승</h6>
-              <p class="card-text">빈방입니다</p>
+              <h6 class="card-subtitle mb-2 text-muted">{{query}}</h6>
+              <p class="card-text">랭킹/관전자수.</p>
               <a href="/waitingroom/{{query}}" class="card-link">참가</a>
               <a href="#" class="card-link">관전</a>
             </div>
           </div>
       {% endif %}
 
-        {%if search_room %} 
-        
+      {%if search_room %} 
+      
         {% comment %}
           새로운 방 생성
         {% endcomment %}
           
-          {% for room in search_room %} 
-            <div class="card col-md-4 " style="width: 18rem;">
-              <div class="card-body">
-                <h5 class="card-title">{{room.room_name}}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">0연승</h6>
-                <p class="card-text">{{room.player1}} vs {{room.player2}}</p>
-                <a href="/waitingroom/{{room.room_name}}" class="card-link">참가</a>
-                <a href="#" class="card-link">관전</a>
-              </div>
-            </div>
-            {% endfor %} 
-            {% else %} 
-            <div class="container" style="display: inline-block;text-align: center;">
-            <h1> {{search_word}} {{error}}</h1>
-            </div>
-            {% endif %} 
+        {% for room in search_room %} 
+        <div class="card col-md-4 " style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">{{room.room_name}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{room.room_name}}</h6>
+            <p class="card-text">랭킹/관전자수.</p>
+            <a href="/waitingroom/{{room.room_name}}" class="card-link">참가</a>
+            <a href="#" class="card-link">관전</a>
+          </div>
+        </div>
+        {% endfor %} 
+        {% else %} 
+        <div class="container" style="display: inline-block;text-align: center;">
+        <h1> {{search_word}} {{error}}</h1>
+        </div>
+      {% endif %} 
 
         </div>
       </div>

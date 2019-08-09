@@ -35,6 +35,11 @@ class User(AbstractUser):
         null=True,
         
     )
+
+    is_playing = models.IntegerField(
+        default=False
+    )
+    
     objects = UserManager()
 
     def __str__(self):
