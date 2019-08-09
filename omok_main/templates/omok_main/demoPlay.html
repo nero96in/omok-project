@@ -13,17 +13,17 @@
       <div class="player-profile card d-flex flex-column align-items-center" style="width: 18rem;">
         <img src="{% static 'omok_main/sample_user.png' %}" class="card-img-top profile-image" alt="...">
         <div class="card-body">
-          <h3 class="card-title text-center">player1</h3>
+          <h3 class="card-title text-center" id="player1_name">player1</h3>
         </div>
         <div class="player-informations card-body pt-0">
             <p class="card-text">
-              승: <span class="win pl-4">10</span>
+              승: <span class="win pl-4" id="player1_win">10</span>
             </p>
             <p class="card-text">
-              무: <span class="win pl-4">0</span>
+              무: <span class="win pl-4" id="player1_draw">0</span>
             </p>
             <p class="card-text">
-              패: <span class="win pl-4">10</span>
+              패: <span class="win pl-4" id="player1_lose">10</span>
             </p>
   
           </div>
@@ -34,17 +34,17 @@
       <div class="player-profile card d-flex flex-column align-items-center" style="width: 18rem;">
           <img src="{% static 'omok_main/sample_user.png' %}" class="card-img-top profile-image" alt="...">
           <div class="card-body">
-            <h3 class="card-title text-center">player2</h3>
+            <h3 class="card-title text-center" id="player2_name">player2</h3>
           </div>
           <div class="player-informations card-body pt-0">
             <p class="card-text">
-              승: <span class="win pl-4">10</span>
+              승: <span class="win pl-4" id="player2_win">10</span>
             </p>
             <p class="card-text">
-              무: <span class="win pl-4">10</span>
+              무: <span class="win pl-4" id="player2_draw">10</span>
             </p>
             <p class="card-text">
-              패: <span class="win pl-4">10</span>
+              패: <span class="win pl-4" id="player2_lose">10</span>
             </p>
   
           </div>
@@ -70,6 +70,8 @@ var updateCaptures = function (node) {
 var jrecord = new JGO.Record(19);
 var jboard = jrecord.jboard;
 var jsetup = new JGO.Setup(jboard, JGO.BOARD.largeWalnut);
+
+var is_playing = false
 var player = undefined; // next player
 
 var current_player = undefined
@@ -89,9 +91,11 @@ jsetup.create('board', function(canvas) {
   };
 
   canvas.addListener('click', function(coord, ev) {
-    if(current_player != player | player == undefined){
+    if(current_player != player | player == undefined || is_playing == false){
       return 
     }
+    
+    
     // console.log(player, coord)
     message = {"player": player, "x": coord['i'], "y": coord['j']}
     //console.log(message)
@@ -141,7 +145,15 @@ jsetup.create('board', function(canvas) {
       lastMove = coord;
 
       if(message['alert']){
-        alert(message['alert'])
+        // alert(message['alert'])
+      }
+
+      if(current_player == 2){
+        $('#player2 .player-profile').css('border', '1px solid red')
+        $('#player1 .player-profile').css('border', 'none')
+      } else if(current_player == 1){
+        $('#player1 .player-profile').css('border', '1px solid red')
+        $('#player2 .player-profile').css('border', 'none')
       }
     }
 
@@ -152,6 +164,7 @@ jsetup.create('board', function(canvas) {
 
     if(type == 'start_settings') {
       var start_settings = data['start_settings']
+      is_playing = true
       black_player = start_settings['black']
       white_player = start_settings['white']
       current_player = start_settings['current_player']
@@ -164,17 +177,42 @@ jsetup.create('board', function(canvas) {
       } else if(userName == white_player){
         player = 2
       }
-      alert(start_settings['alert'])
+
+      $('#player1 .player-profile').css('border', '1px solid red')
+      // alert(start_settings['alert'])
     }
 
     if(type == 'update_profile'){
-      var update_profile = data['update_profile']
-      console.log(update_profile)
+      var player1_info = data['player1_info']
+      var player2_info = data['player2_info']
+      console.log("player1_info:", player1_info)
+      console.log("player2_info:", player2_info)
+      if(player1_info){
+        $('#player1_name').text(player1_info['username'])
+        $('#player1_win').text(player1_info['win'])
+        $('#player1_draw').text(player1_info['draw'])
+        $('#player1_lose').text(player1_info['lose'])
+      }
+      
+      if(player2_info){
+        $('#player2_name').text(player2_info['username'])
+        $('#player2_win').text(player2_info['win'])
+        $('#player2_draw').text(player2_info['draw'])
+        $('#player2_lose').text(player2_info['lose'])
+      }
+    }
+
+    if(type == 'end_game'){
+      var win_user = data['win_user']
+      var lose_user = data['lose_user']
+      is_playing = false
+      console.log("win_user:", win_user)
+      console.log("lose_user:", lose_user)
     }
   };
 
   canvas.addListener('mousemove', function(coord, ev) {
-    if(coord.i == -1 || coord.j == -1 || (coord.i == lastX && coord.j == lastY))
+    if(coord.i == -1 || coord.j == -1 || (coord.i == lastX && coord.j == lastY) || is_playing == false)
       return;
 
     if(lastHover) // clear previous hover if there was one

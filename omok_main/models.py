@@ -6,3 +6,5 @@ class Room(models.Model):
     player1 = models.CharField(max_length=255, null=True)
     player2 = models.CharField(max_length=255, null=True)
     winner = models.CharField(max_length=255, null=True)
+    is_playing = models.BooleanField(default=False)
+    omok_board = models.TextField(null=True, default='')

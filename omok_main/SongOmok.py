@@ -17,6 +17,7 @@ class Omok:
             for j in range(self.BOARD_SIZE): #사이즈표시
                 print(self.board[i][j], end=' ')
             print('\n')
+        return self.board
 
     def Put_omok(self, player, x, y):
         # global x
