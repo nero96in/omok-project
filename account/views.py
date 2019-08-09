@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth import login as django_login, logout as django_logout, authenticate
-
+from django.core.paginator import Paginator
 from .form import LoginForm, SignupForm
+from .models import User
+from django.db import connection
 
 # Create your views here.
 
@@ -64,3 +66,52 @@ def logout(request):
         auth.logout(request)
         return redirect('/')
     return render(request, 'signup.html')
+
+def ranking(request):
+    all_user = User.objects.all()
+    sort=User.objects.all().order_by('-win')
+    length = len(sort)
+    print(length)
+    total_ranking = list(range(length))
+    paginator=Paginator(sort,7)
+    page=request.GET.get('page')
+    posts=paginator.get_page(page)
+    
+    if request.method == "GET":   
+        return render(request, "ranking.html",{
+                'all_user':all_user, 
+                'sort':sort,
+                'posts':posts,
+                'total_ranking': total_ranking,
+                })
+    elif request.method == "POST":
+        query = request.POST['query']
+        if query:
+            search_nick = all_user.filter(nickname=query)
+        return render(request, "ranking.html",{
+                'all_user':all_user, 
+                'search_nick' : search_nick, 
+                'sort':sort,
+                'posts':posts,
+                'total_ranking': total_ranking,
+                })
+        
+
+
+
+def search(request):
+    user = User.objects.all()
+    saved_nick=User.objects.all()
+    search_nick=request.GET.get('bar','')
+
+    if search_nick:
+        search_nick=user.filter(saved_nick=search_nick)
+
+    return render(request, "ranking.html",{
+            'user':user, 
+            'saved_nick':saved_nick,
+            'search_nick' : search_nick, })
+
+
+
+

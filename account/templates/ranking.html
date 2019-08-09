@@ -1,0 +1,178 @@
+
+    
+    
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      
+    <script defer src="https://use.fontawesome.com/releases/v5.10.1/js/all.js" integrity="sha384-aC/bNmpJEYrEVX5KNHN+m0CmvycQX9wDnYv8X2gdXQjrbtDP5OcU5DRiXwL6bPwr" crossorigin="anonymous"></script>
+    <link href= "https://fonts.googleapis.com/css?family=Do+Hyeon|Nanum+Gothic+Coding&display=swap"  rel="stylesheet">  
+    
+    {% block css %}
+    <link rel="stylesheet" href="{% static 'omok_main/searchdesign.css' %}">
+{% endblock css %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SEARCH</title>
+    <link rel="stylesheet" href= "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src= "https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    
+    <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+
+
+
+</head>
+<body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                    <a class="navbar-brand" href="{% url 'home' %}">오목하게 만들어주겠어 펀-치</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="/account/ranking/">Rank</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="#">About Us</a>
+                            </li>
+                            {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">환영합니다. {{ user.username }} 님!</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="/waitingroom/">한판하실?</a>
+                                    <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+                                    <form id="logout" method="POST" action="{% url 'logout' %}">
+                                        {% csrf_token %} <input type="hidden" />
+                                    </form>
+                                </div>
+                            </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="{% url 'signup' %}">Signup</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>    
+        <div class="container">
+        
+            
+            <div class="top">
+            <h1 class="title">전적을 검색해보세요</h1>
+
+            <form action="{% url 'ranking' %}" method="POST">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center align-items-center">
+                        <input type="text" class="form-control col-md-4" style="border-bottom-right-radius: 0px; border-top-right-radius: 0px; border-right-color: white; border-right-width: 0px; outline: none !important; box-shadow: none !important;" placeholder="이곳에 닉네임을 입력하세요" autocomplete="on" name="query">
+                        <div class="d-flex iicon align-items-center" style="border-left-width: 0px;">
+                            <button type="submit" class="btn btn-success" style="background-color: white; height: 38px; width: 45px; border-left-color: white; border-right-color: #ced4da;
+                            border-top-color: #ced4da;border-bottom-color: #ced4da ">
+                            <i class="fas fa-search" style="font-size: 25px ; color:black; padding-right: 5px;"></i>
+                            </button>
+                        </div>
+                        <!-- <input type="submit"> -->
+                </div>  
+            </form>
+            <br>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td><B>닉네임</B></td>
+                        <!-- <td><B>랭킹</B></td> -->
+                        <td><B>승</B></td>
+                        <td><B>무</B></td>
+                        <td><B>패</B></td>
+                        <!-- <td><B>승률</B></td> -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                    {% if search_nick %}
+                        {% for rank in search_nick %}
+                        <tr>
+                            <td>{{rank.nickname}}</td>
+                            <!-- <td>{{forloop.counter}}</td> -->
+                            <td>{{rank.win}}</td>
+                            <td>{{rank.draw}}</td>
+                            <td>{{rank.lose}}</td>
+                            <!-- <td>{{user.ratio}}</td> -->
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                        
+                    
+
+                <tbody>
+            </table>
+        </div>
+        
+    </div>
+    <div class="container">
+        <div class="botto">
+            
+            <h1 class="title">랭킹 전체보기</h1>
+            <table class="table">
+                    <thead>
+                        
+                        <tr>
+                            <td><B>랭킹</B></td>
+                            <td><B>닉네임</B></td>
+                            <td><B>승</B></td>
+                            <td><B>패</B></td>
+                        </tr>
+                        
+                        </thead>
+                        <tbody>
+                        {% for ranki in posts %}
+                        <tr>
+                            <td>{{forloop.counter}}위</td>
+                            <td> {{ranki.nickname}}</td>
+                            <td>{{ranki.win}}</td>
+                            <td>{{ranki.lose}}</td>
+                            
+                        </tr>
+                        {% endfor %}
+                    <tbody>
+                </table>
+    </div>
+    <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item disabled" style="outline: none !important; box-shadow: none !important;">
+                {% if posts.has_previous %}
+                <li ><a href="?page=1" style="outline: none !important; box-shadow: none !important; ">First</a></li>
+                <a href="?page={{posts.previous_page_number}}" style="outline: none !important; box-shadow: none !important;  margin-left: 10px; margin-right: 10px;">Previous</a>
+                {% endif %}
+              </li>
+              <span>{{posts.number}}</span>
+              <span>of</span>
+              <span>{{posts.paginator.num_pages}}</span>
+              
+
+              <li>
+                  {% if posts.has_next%}
+                <a href="?page={{posts.next_page_number}}" style="outline: none !important; box-shadow: none !important;  margin-left: 10px;">Next</a>
+                
+                {% endif %}
+                <a  href="?page={{posts.paginator.num_pages}}" style="outline: none !important; box-shadow: none !important; margin-left: 10px;">Last</a>
+              </li>
+            </ul>
+          </nav>
+        </div>       
+</body>
+</html>

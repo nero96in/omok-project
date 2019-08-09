@@ -39,6 +39,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             "message": str(self.user),
                         }
                     )
+                    await self.send(text_data=json.dumps({
+                        'type': 'load_board',
+                        'load_board': self.room.omok_board
+                    }))
+                    
                 else:
                     if not self.room.player2: self.room.player2 = str(self.user)
                     elif not self.room.player1: self.room.player1 = str(self.user)

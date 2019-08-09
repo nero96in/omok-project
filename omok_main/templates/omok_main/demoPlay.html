@@ -209,6 +209,19 @@ jsetup.create('board', function(canvas) {
       console.log("win_user:", win_user)
       console.log("lose_user:", lose_user)
     }
+
+    if(type == 'load_board'){
+      var load_board = data['load_board']
+      coords = load_board.split(';')
+      console.log(coords)
+      for(var i=0; i<coords.length; i++){
+        info = coords[i].split(',')
+        player = coord[0]
+        coord = new JGO.Coordinate(coord[1], coord[2])
+        jboard.setType(coord, player)
+        
+      }
+    }
   };
 
   canvas.addListener('mousemove', function(coord, ev) {

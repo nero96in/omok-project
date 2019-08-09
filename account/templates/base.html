@@ -22,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-item nav-link" href="#">Rank</span></a>
+                        <a class="nav-item nav-link" href="/account/ranking/">Rank</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-item nav-link" href="#">About Us</a>
@@ -32,7 +32,7 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">환영합니다. {{ user.username }} 님!</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">한판하실?</a>
+                            <a class="dropdown-item" href="/waitingroom/">한판하실?</a>
                             <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">Logout</a>
                             <form id="logout" method="POST" action="{% url 'logout' %}">
                                 {% csrf_token %} <input type="hidden" />
